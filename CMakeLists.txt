@@ -17,17 +17,25 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(nav2_costmap_2d REQUIRED)
 find_package(pluginlib REQUIRED)
 
 add_executable(multi_amr_node src/multi_amr_node.cpp)
 target_include_directories(multi_amr_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
+
 ament_target_dependencies(
   multi_amr_node
   "pluginlib"
+  "nav2_costmap_2d"
+  "rclcpp"
 )
-
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
 install(TARGETS multi_amr_node
   DESTINATION lib/${PROJECT_NAME})
 
@@ -41,5 +49,9 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+ament_export_include_directories(
+  include
+)
 
 ament_package()
